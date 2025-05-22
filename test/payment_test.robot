@@ -31,7 +31,7 @@ Invalid Payment Flow
     Fill Payment Form    123333333333    12/20    123    1000
     Submit Payment
     Mock Payment Gateway    401    {"status": "error","message": "Invalid Credit Card","detail": "Authentication fail "}    ${authentication_fail}
-    Verify Refund Process
+    Verify Invalid Credit Card
     Clear Payment Status
 
 #Submit test when test service is down
@@ -40,7 +40,7 @@ Payment Gateway Down
     Fill Payment Form    4111111111111145    12/28    123    1000
     Submit Payment
     Mock Payment Gateway    500    {"status": "error","message": "Internal Server Error","detail": "Unexpected server failure while processing payment"}    ${server_error}
-    Verify Refund Process
+    Verify PaymentGateway Down
     Clear Payment Status
 
 #Verify refund processed correctly
@@ -52,10 +52,11 @@ Verify Refund Payment
     Verify Refund Process
     Clear Payment Status
 
-
+#Verify Payment Fail due to insufficient amount
 Failed Payment Flow
     [Tags]    payment    error-path
     Fill Payment Form    4111111111111145    12/28    123    100
     Submit Payment
-    Mock Payment Gateway    400    {"status":"failed","error":"Insufficient funds","remark":"Payment Fail"}    ${insufficient}
+    Mock Payment Gateway    400    {"status":"failed","error":"Insufficient amount","remark":"Payment Fail"}    ${insufficient}
     Verify Payment Failure
+    Clear Payment Status

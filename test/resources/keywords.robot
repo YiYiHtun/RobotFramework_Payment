@@ -57,6 +57,12 @@ Verify Refund Process
     Log   Proceed to Refund Process
     #to write other verify steps for refund test case
 
+Verify Invalid Credit Card
+    Log   Show Invalid Credit Cart
+
+Verify PaymentGateway Down
+    Log    Payment Gateway Down:unable to connect
+
 
 Clear Payment Status
     Clear Element Text    id=status
