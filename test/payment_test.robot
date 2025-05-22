@@ -6,7 +6,7 @@ Suite Setup    Open Browser To Payment Page
 Suite Teardown    Close Browser
 
 *** Variables ***
-${BASE_URL}    file:///D:/OneDrive/Desktop/sample_payment_ui.html
+${BASE_URL}        file:///D:/RobotFramework/ui/payment_ui.html
 ${MOCK_API_URL}    http://localhost:3000/mock-payment
 ${success_code}    200
 ${server_error}    500
@@ -16,7 +16,7 @@ ${authentication_fail}    401
 
 
 *** Test Cases ***
-#Verify successful payment processing with valid card
+#Verify successful test processing with valid card
 Successful Payment Flow
     [Tags]    payment    happy-path
     Fill Payment Form    4111111111111111    12/28    123    100
@@ -34,7 +34,7 @@ Invalid Payment Flow
     Verify Refund Process
     Clear Payment Status
 
-#Submit payment when payment service is down
+#Submit test when test service is down
 Payment Gateway Down
     [Tags]    payment    error-path
     Fill Payment Form    4111111111111145    12/28    123    1000
