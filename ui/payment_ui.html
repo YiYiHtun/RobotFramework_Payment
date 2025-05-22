@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mock Payment Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      max-width: 400px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Payment Form</h1>
+
+  <input id="card_number" placeholder="Card Number" />
+  <input id="expiry_date" placeholder="Expiry Date (MM/YY)" />
+  <input id="cvv" placeholder="CVV" />
+  <input id="amount" placeholder="Amount" />
+  <button id="submit-payment">Pay</button>
+<br>
+  
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('submit-payment').addEventListener('click', function () {
+      const cardNumber = document.getElementById('card_number').value;
+      const expiryDate = document.getElementById('expiry_date').value;
+      const cvv = document.getElementById('cvv').value;
+      const amount = document.getElementById('amount').value;
+
+      if (!cardNumber || !expiryDate || !cvv || !amount) {
+        document.getElementById('result').innerHTML = '<h2 style="color:red;">Please fill all fields.</h2>';
+        return;
+      }
+
+      fetch('http://localhost:3000/mock-payment/process', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          card_number: cardNumber,
+          expiry_date: expiryDate,
+          cvv: cvv,
+          amount: amount
+        })
+      })
+      .then(async res => {
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          document.getElementById('result').innerHTML = `
+            <h2>Payment Details Received:</h2>
+            <ul>
+              <li><strong>Amount:</strong> ${data.amount}</li>
+              <li><strong>Card Number:</strong> ${data.card_number}</li>
+              <li><strong>Expiry Date:</strong> ${data.expiry_date}</li>
+              <li><strong>CVV:</strong> ${data.cvv}</li>
+            </ul>
+          `;
+        } else {
+          const text = await res.text();
+          document.getElementById('result').innerHTML = `<pre>${text}</pre>`;
+        }
+      })
+      .catch(err => {
+        document.getElementById('result').innerHTML = `<h2 style="color:red;">Error: ${err.message}</h2>`;
+      });
+    });
+  </script>
+  
+  <input id="status" placeholder="http code" />
+  <input id="tran_details" placeholder="transaction_details" width="60%" />
+  <input id="payment_status" placeholder="Payment Status" />
+</body>
+</html>
